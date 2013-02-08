@@ -920,9 +920,15 @@ terminal_set(EditLine *el, const char *term)
 		Val(T_co) = tgetnum("co");
 		Val(T_li) = tgetnum("li");
 		for (t = tstr; t->name != NULL; t++) {
+			char* beforea = area;
+			char* p=tgetstr(t->name,&area);
+			if (p)
+			{
+				/*because the tgetstr has error ,so do this*/
+				p = beforea;
+			}
 			/* XXX: some systems' tgetstr needs non const */
-			terminal_alloc(el, t, tgetstr(strchr(t->name, *t->name),
-			    &area));
+			terminal_alloc(el, t, p);
 		}
 	}
 
